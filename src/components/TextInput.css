@@ -1,0 +1,36 @@
+/* ============================================
+   TextInput — Reusable labelled input
+   ============================================ */
+
+.text-input-group {
+  margin-bottom: 16px;
+}
+
+.text-input-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--grey-dark);
+}
+
+.text-input-field {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1rem;
+  color: var(--grey-dark);
+  background-color: var(--white);
+  border: 2px solid #ccc;
+  border-radius: var(--radius);
+  transition: border-color 0.2s ease;
+  outline: none;
+}
+
+.text-input-field:focus {
+  border-color: var(--teal);
+}
+
+.text-input-field::placeholder {
+  color: #aaa;
+}

@@ -1,0 +1,39 @@
+/* ============================================
+   ConfirmationScreen
+   ============================================ */
+
+.confirm-icon {
+  width: 80px;
+  height: 80px;
+  background-color: var(--teal);
+  color: var(--white);
+  font-size: 2.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 20px auto 24px;
+}
+
+.confirm-heading {
+  text-align: center;
+  font-size: 1.4rem;
+  color: var(--teal);
+  margin-bottom: 16px;
+}
+
+.confirm-message {
+  font-size: 1rem;
+  text-align: center;
+  color: var(--grey-dark);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.confirm-sub {
+  font-size: 0.95rem;
+  text-align: center;
+  color: var(--grey);
+  margin-bottom: 8px;
+}

@@ -1,0 +1,18 @@
+/* ============================================
+   LoginScreen
+   ============================================ */
+
+.login-subtitle {
+  font-size: 0.95rem;
+  color: var(--grey);
+  margin-bottom: 24px;
+}
+
+.login-error {
+  background-color: #fdecea;
+  color: var(--red);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}

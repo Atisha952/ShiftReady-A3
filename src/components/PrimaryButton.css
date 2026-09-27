@@ -1,0 +1,31 @@
+/* ============================================
+   PrimaryButton — Reusable teal button
+   ============================================ */
+
+.primary-button {
+  display: block;
+  width: 100%;
+  padding: 14px 20px;
+  margin-top: 20px;
+  background-color: var(--teal);
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.primary-button:hover:not(:disabled) {
+  background-color: var(--teal-dark);
+}
+
+.primary-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.primary-button:disabled {
+  background-color: var(--grey);
+  cursor: not-allowed;
+}

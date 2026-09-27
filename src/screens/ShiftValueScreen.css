@@ -1,0 +1,42 @@
+/* ============================================
+   ShiftValueScreen
+   ============================================ */
+
+.sv-desc {
+  font-size: 0.95rem;
+  color: var(--grey);
+  margin-bottom: 24px;
+}
+
+.sv-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--teal-light);
+  padding: 16px;
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+}
+
+.sv-card-highlight {
+  background-color: var(--teal);
+  color: var(--white);
+}
+
+.sv-card-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.sv-card-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.sv-note {
+  font-size: 0.85rem;
+  color: var(--grey);
+  margin-top: 8px;
+  margin-bottom: 12px;
+  font-style: italic;
+}

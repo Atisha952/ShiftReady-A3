@@ -1,0 +1,9 @@
+/* ============================================
+   PreferencesScreen
+   ============================================ */
+
+.prefs-description {
+  font-size: 0.95rem;
+  color: var(--grey);
+  margin-bottom: 24px;
+}

@@ -1,0 +1,52 @@
+/* ============================================
+   ChecklistScreen
+   ============================================ */
+
+.cl-desc {
+  font-size: 0.95rem;
+  color: var(--grey);
+  margin-bottom: 24px;
+}
+
+.cl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.cl-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background-color: var(--teal-light);
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.cl-item:has(.cl-checkbox:checked) {
+  background-color: #c8e6c9;
+}
+
+.cl-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: var(--teal);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cl-label {
+  font-size: 0.95rem;
+  color: var(--grey-dark);
+  line-height: 1.4;
+}
+
+.cl-hint {
+  font-size: 0.85rem;
+  color: var(--red);
+  margin-bottom: 4px;
+}
