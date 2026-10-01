@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import LoginScreen from './screens/LoginScreen'
 import PreferencesScreen from './screens/PreferencesScreen'
 import ShiftDetailsScreen from './screens/ShiftDetailsScreen'
@@ -41,6 +41,7 @@ const STEP_LABELS = [
 function App() {
   const [currentStep, setCurrentStep] = useState(0)
   const [formData, setFormData] = useState(INITIAL_FORM)
+  const savingRef = useRef(false)
 
   /* Update a single field in formData */
   const updateField = (field, value) => {
@@ -63,51 +64,67 @@ function App() {
   const goNext = () => setCurrentStep((step) => step + 1)
   const goBack = () => setCurrentStep((step) => Math.max(0, step - 1))
   const handleSaveShift = async () => {
+    if (savingRef.current) return
+    savingRef.current = true
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser()
 
-    if (authError || !user) {
-      alert('Please log in again.')
-      return
+      if (authError || !user) {
+        alert('Please log in again.')
+        return
+      }
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      if (!session) {
+        alert('Please log in again.')
+        return
+      }
+
+      const response = await fetch(
+        'https://shiftready-a3.onrender.com/shifts',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            facility: formData.facility,
+            shift_date: formData.shiftDate,
+            shift_start: formData.shiftStart,
+            shift_end: formData.shiftEnd,
+            hourly_pay: Number(formData.hourlyPay),
+            travel_method: formData.travelMethod,
+            max_travel_time: Number(formData.maxTravelTime),
+            return_travel_time: Number(formData.returnTravelTime),
+            return_travel_cost: Number(formData.returnTravelCost),
+            docs_ready: formData.docsReady,
+            uniform_ready: formData.uniformReady,
+            route_planned: formData.routePlanned,
+            arrive_early: formData.arriveEarly,
+          }),
+        }
+      )
+
+      if (!response.ok) {
+        const result = await response.json()
+        alert(`Could not save shift: ${result.detail || 'Please try again.'}`)
+        return
+      }
+
+      setCurrentStep(6)
+    } catch {
+      alert('Could not connect to the server. Please try again.')
+    } finally {
+      savingRef.current = false
     }
-
-    const { data: { session } } = await supabase.auth.getSession()
-
-    if (!session) {
-      alert('Please log in again.')
-      return
-    }
-
-    const response = await fetch('http://127.0.0.1:8000/shifts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session.access_token}`,
-      },
-      body: JSON.stringify({
-        facility: formData.facility,
-        shift_date: formData.shiftDate,
-        shift_start: formData.shiftStart,
-        shift_end: formData.shiftEnd,
-        hourly_pay: Number(formData.hourlyPay),
-        travel_method: formData.travelMethod,
-        max_travel_time: Number(formData.maxTravelTime),
-        return_travel_time: Number(formData.returnTravelTime),
-        return_travel_cost: Number(formData.returnTravelCost),
-        docs_ready: formData.docsReady,
-        uniform_ready: formData.uniformReady,
-        route_planned: formData.routePlanned,
-        arrive_early: formData.arriveEarly,
-      }),
-    })
-
-    if (!response.ok) {
-      const result = await response.json()
-      alert(`Could not save shift: ${result.detail}`)
-      return
-    }
-
-    setCurrentStep(6)
   }
   const renderScreen = () => {
     /* Stepper props: only shown on steps 1–6 (not Login) */

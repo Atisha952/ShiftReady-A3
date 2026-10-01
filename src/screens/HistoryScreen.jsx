@@ -20,7 +20,7 @@ function HistoryScreen({ onBack }) {
                 throw new Error('Please log in again.')
             }
 
-            const response = await fetch('http://127.0.0.1:8000/shifts', {
+            const response = await fetch('https://shiftready-a3.onrender.com/shifts', {
                 headers: {
                     Authorization: `Bearer ${session.access_token}`,
                 },

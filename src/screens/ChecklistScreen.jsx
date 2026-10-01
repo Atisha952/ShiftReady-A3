@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import ScreenLayout from '../components/ScreenLayout'
 import PrimaryButton from '../components/PrimaryButton'
 import './ChecklistScreen.css'
@@ -10,10 +11,27 @@ const CHECKLIST_ITEMS = [
 ]
 
 function ChecklistScreen({ formData, updateField, onNext, onBack, ...rest }) {
+  const [isSaving, setIsSaving] = useState(false)
   const allChecked = CHECKLIST_ITEMS.every((item) => formData[item.key])
 
+  const handleConfirm = async () => {
+    if (isSaving || !allChecked) return
+
+    setIsSaving(true)
+    try {
+      await onNext()
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
   return (
-    <ScreenLayout title="Pre-Shift Checklist" showBack={true} onBack={onBack} {...rest}>
+    <ScreenLayout
+      title="Pre-Shift Checklist"
+      showBack={!isSaving}
+      onBack={onBack}
+      {...rest}
+    >
       <p className="cl-desc">
         Tick each item to confirm you are prepared for the shift.
       </p>
@@ -25,6 +43,7 @@ function ChecklistScreen({ formData, updateField, onNext, onBack, ...rest }) {
               type="checkbox"
               checked={formData[item.key]}
               onChange={(e) => updateField(item.key, e.target.checked)}
+              disabled={isSaving}
               className="cl-checkbox"
             />
             <span className="cl-label">{item.label}</span>
@@ -37,9 +56,9 @@ function ChecklistScreen({ formData, updateField, onNext, onBack, ...rest }) {
       )}
 
       <PrimaryButton
-        label="Confirm Shift Plan"
-        onClick={onNext}
-        disabled={!allChecked}
+        label={isSaving ? 'Saving…' : 'Confirm Shift Plan'}
+        onClick={handleConfirm}
+        disabled={!allChecked || isSaving}
       />
     </ScreenLayout>
   )
