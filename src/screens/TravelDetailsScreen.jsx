@@ -7,6 +7,21 @@ import './TravelDetailsScreen.css'
 function TravelDetailsScreen({ formData, updateField, onNext, onBack, ...rest }) {
   const [error, setError] = useState('')
 
+  const totalSeconds = Math.round(Number(formData.returnTravelTime || 0) * 3600)
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+
+  const updateTime = (part, value) => {
+    const number = Math.max(0, Math.floor(Number(value) || 0))
+    const newHours = part === 'hours' ? number : hours
+    const newMinutes = part === 'minutes' ? Math.min(number, 59) : minutes
+    const newSeconds = part === 'seconds' ? Math.min(number, 59) : seconds
+
+    const newTotalSeconds = newHours * 3600 + newMinutes * 60 + newSeconds
+    updateField('returnTravelTime', String(newTotalSeconds / 3600))
+  }
+
   const handleNext = () => {
     if (!formData.returnTravelTime || !formData.returnTravelCost) {
       setError('Please enter both return travel time and cost.')
@@ -23,23 +38,34 @@ function TravelDetailsScreen({ formData, updateField, onNext, onBack, ...rest })
   return (
     <ScreenLayout title="Travel Details" showBack={true} onBack={onBack} {...rest}>
       <p className="travel-desc">
-        Enter the return travel time and cost for this shift.
+        Enter the total travel time to the shift and back home.
       </p>
 
       {error && <p className="travel-error">{error}</p>}
 
       <TextInput
-        label="Return Travel Time (hours)"
-        value={formData.returnTravelTime}
-        onChange={(val) => updateField('returnTravelTime', val)}
+        label="Travel hours"
+        value={hours || ''}
+        onChange={(value) => updateTime('hours', value)}
         type="number"
-        placeholder="e.g. 1.5"
+      />
+      <TextInput
+        label="Travel minutes"
+        value={minutes || ''}
+        onChange={(value) => updateTime('minutes', value)}
+        type="number"
+      />
+      <TextInput
+        label="Travel seconds"
+        value={seconds || ''}
+        onChange={(value) => updateTime('seconds', value)}
+        type="number"
       />
 
       <TextInput
         label="Return Travel Cost ($)"
         value={formData.returnTravelCost}
-        onChange={(val) => updateField('returnTravelCost', val)}
+        onChange={(value) => updateField('returnTravelCost', value)}
         type="number"
         placeholder="e.g. 12.00"
       />
