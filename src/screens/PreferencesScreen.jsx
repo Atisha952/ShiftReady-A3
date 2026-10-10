@@ -3,7 +3,7 @@ import ScreenLayout from '../components/ScreenLayout'
 import PrimaryButton from '../components/PrimaryButton'
 import './PreferencesScreen.css'
 
-function PreferencesScreen({ formData, updateField, onNext, onBack, ...rest }) {
+function PreferencesScreen({ formData, updateField, onNext, onBack, onViewHistory, ...rest }) {
   const [time, setTime] = useState(() => {
     if (!formData.maxTravelTime) return { hours: '', minutes: '', seconds: '' }
 
@@ -79,6 +79,7 @@ function PreferencesScreen({ formData, updateField, onNext, onBack, ...rest }) {
       </div>
 
       <PrimaryButton label="Next" onClick={onNext} />
+      <PrimaryButton label="View Saved Shifts" onClick={onViewHistory} />
     </ScreenLayout>
   )
 }

@@ -23,6 +23,23 @@
   margin: 0;
 }
 
+.logout-button {
+  position: absolute;
+  top: 24px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.85;
+}
+
+.logout-button:hover {
+  opacity: 1;
+}
+
 .back-button {
   background: none;
   border: none;

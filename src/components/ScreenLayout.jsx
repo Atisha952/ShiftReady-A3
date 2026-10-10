@@ -1,7 +1,15 @@
 import StepperBar from './StepperBar'
 import './ScreenLayout.css'
 
-function ScreenLayout({ title, children, showBack = false, onBack, steps, currentStepIndex }) {
+function ScreenLayout({
+  title,
+  children,
+  showBack = false,
+  onBack,
+  steps,
+  currentStepIndex,
+  onLogout,
+}) {
   return (
     <div className="screen-layout">
       <header className="screen-header">
@@ -11,6 +19,11 @@ function ScreenLayout({ title, children, showBack = false, onBack, steps, curren
           </button>
         )}
         <h1 className="screen-title">{title}</h1>
+        {onLogout && (
+          <button type="button" className="logout-button" onClick={onLogout}>
+            Log out
+          </button>
+        )}
       </header>
 
       {steps && currentStepIndex >= 0 && (
