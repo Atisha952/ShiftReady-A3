@@ -23,7 +23,7 @@ function TravelDetailsScreen({ formData, updateField, onNext, onBack, ...rest })
   }
 
   const handleNext = () => {
-    if (!formData.returnTravelTime || !formData.returnTravelCost) {
+    if (!formData.returnTravelTime || formData.returnTravelCost === '') {
       setError('Please enter both return travel time and cost.')
       return
     }

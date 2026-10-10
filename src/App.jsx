@@ -13,7 +13,7 @@ import './App.css'
 const INITIAL_FORM = {
   email: '',
   password: '',
-  travelMethod: 'driving',
+  travelMethod: 'public transport',
   maxTravelTime: '',
   facility: '',
   shiftDate: '',
@@ -365,10 +365,10 @@ function App() {
     const stepperProps =
       currentStep >= 1 && currentStep <= 6
         ? {
-            steps: STEP_LABELS,
-            currentStepIndex: currentStep - 1,
-            onLogout: handleLogout,
-          }
+          steps: STEP_LABELS,
+          currentStepIndex: currentStep - 1,
+          onLogout: handleLogout,
+        }
         : {}
 
     switch (currentStep) {

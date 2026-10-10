@@ -62,8 +62,8 @@ function ShiftValueScreen({ formData, onNext, onBack, ...rest }) {
       </div>
 
       <p className="sv-note">
-        Effective hourly value includes {returnTravelTime} hr return travel time
-        in the total hours worked.
+        Effective hourly value includes {Math.floor(returnTravelTime)} hr {Math.round((returnTravelTime % 1) * 60)} min return travel time
+        in the total time spent on the shift and travel.
       </p>
 
       <PrimaryButton label="Continue to Checklist" onClick={onNext} />

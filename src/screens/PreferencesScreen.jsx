@@ -47,8 +47,8 @@ function PreferencesScreen({ formData, updateField, onNext, onBack, onViewHistor
           value={formData.travelMethod}
           onChange={(e) => updateField('travelMethod', e.target.value)}
         >
-          <option value="driving">Driving</option>
           <option value="public transport">Public Transport</option>
+          <option value="driving">Driving</option>
           <option value="rideshare">Rideshare</option>
           <option value="cycling">Cycling</option>
           <option value="walking">Walking</option>
