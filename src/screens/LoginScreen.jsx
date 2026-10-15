@@ -11,6 +11,7 @@ function LoginScreen({ onNext }) {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('error')
   const [busy, setBusy] = useState(false)
   const busyRef = useRef(false)
 
@@ -21,15 +22,22 @@ function LoginScreen({ onNext }) {
     setPassword('')
     setConfirmPassword('')
     setMessage('')
+    setMessageType('error')
   }
 
   const handleAuth = async () => {
     if (busyRef.current) return
 
     const cleanEmail = email.trim()
+    setMessageType('error')
 
     if (!cleanEmail || !password) {
       setMessage('Please enter your email and password.')
+      return
+    }
+
+    if (isSignUp && password.length < 6) {
+      setMessage('Please choose a password with at least 6 characters.')
       return
     }
 
@@ -54,7 +62,40 @@ function LoginScreen({ onNext }) {
         })
 
       if (error) {
-        setMessage(error.message)
+        setMessage(
+          error.message === 'Failed to fetch'
+            ? 'Unable to connect to the sign-in service. Please check your connection and try again.'
+            : error.message
+        )
+        return
+      }
+
+      if (isSignUp) {
+        // Signup may automatically create a session.
+        // End that session before asking the user to log in.
+        if (data.session) {
+          const { error: signOutError } = await supabase.auth.signOut({
+            scope: 'local',
+          })
+
+          if (signOutError) {
+            setMessage(
+              'Your account was created, but signing out could not be completed. Please reload the page before continuing.'
+            )
+            return
+          }
+        }
+
+        setIsSignUp(false)
+        setEmail(cleanEmail)
+        setPassword('')
+        setConfirmPassword('')
+        setMessageType('success')
+        setMessage(
+          data.session
+            ? 'Account created successfully. Please log in.'
+            : 'Check your inbox and spam folder for a confirmation email, then log in. If you already have an account, use your existing password.'
+        )
         return
       }
 
@@ -63,17 +104,9 @@ function LoginScreen({ onNext }) {
         return
       }
 
-      if (isSignUp) {
-        setIsSignUp(false)
-        setPassword('')
-        setConfirmPassword('')
-        setMessage(
-          'Check your inbox and spam folder for a confirmation email. Confirm your email, then log in. If you already have an account, log in with your existing password.'
-        )
-      } else {
-        setMessage('Login could not be completed. Please try again.')
-      }
+      setMessage('Login could not be completed. Please try again.')
     } catch {
+      setMessageType('error')
       setMessage(
         'Unable to connect. Please check your internet connection and try again.'
       )
@@ -94,7 +127,18 @@ function LoginScreen({ onNext }) {
       </p>
 
       {message && (
-        <p className="login-error" role="status">
+        <p
+          className="login-error"
+          role={messageType === 'error' ? 'alert' : 'status'}
+          style={
+            messageType === 'success'
+              ? {
+                color: '#166534',
+                backgroundColor: '#dcfce7',
+              }
+              : undefined
+          }
+        >
           {message}
         </p>
       )}
@@ -124,12 +168,18 @@ function LoginScreen({ onNext }) {
           />
 
           {isSignUp && (
-            <TextInput
-              label="Confirm password"
-              value={confirmPassword}
-              onChange={setConfirmPassword}
-              type="password"
-            />
+            <>
+              <p style={{ marginTop: '8px', fontSize: '0.9rem' }}>
+                Use at least 6 characters.
+              </p>
+
+              <TextInput
+                label="Confirm password"
+                value={confirmPassword}
+                onChange={setConfirmPassword}
+                type="password"
+              />
+            </>
           )}
 
           <PrimaryButton
